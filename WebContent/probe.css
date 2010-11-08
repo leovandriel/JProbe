@@ -1,0 +1,37 @@
+td {
+	border: 1px solid #aaaaaa;
+	max-width: 200px;
+	word-wrap: break-word;
+}
+
+table {
+	border: 1px solid #aaaaaa;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	font-family: monospace;
+	font-size: 10px;
+}
+
+.head td {
+	background: #dddddd;
+}
+
+.high td {
+	background: #ddddff;
+}
+
+.alarm td {
+	background: #ffdddd;
+}
+
+td.true {
+	background: #ddffdd;
+}
+
+td.false {
+	background: #ffdddd;
+}
+
+td.stack {
+	max-width: 400px;
+}

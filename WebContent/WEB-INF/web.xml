@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>JProbe</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<context-param>
+		<param-name>password</param-name>
+		<param-value>s3cr3t</param-value>
+	</context-param>
+	<context-param>
+		<param-name>allow-interrupt</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<servlet>
+		<description>The JProbe Servlet for web app introspection</description>
+		<display-name>JProbe</display-name>
+		<servlet-name>jprobe</servlet-name>
+		<servlet-class>jprobe.ProbeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jprobe</servlet-name>
+		<url-pattern>/index.html</url-pattern>
+	</servlet-mapping>
+</web-app>

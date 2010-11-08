@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project basedir="." default="help" name="JProbe">
+	<property file="build.properties" />
+	<target name="help">
+		<echo message="Available targets:" />
+		<echo message="build       compile sources into: ${bin-dir}" />
+		<echo message="distribute  jar binaries into: ${dist-dir}" />
+		<echo message="bundle      bundle into a depoyable web archive: ${bundle.file}" />
+		<echo message="clean       cleanup derivatives" />
+		<echo message="all         cleanup, bundle, and cleanup again" />
+	</target>
+	<target name="init">
+		<condition property="servlet-lib.exists">
+			<available file="${servlet-lib.location}" type="dir" />
+		</condition>
+	</target>
+	<target name="check" depends="init" unless="servlet-lib.exists">
+		<fail message="The servlet-lib directory (${servlet-lib.location}) does not exist, please configure in build.properties." />
+	</target>
+	<target name="build" depends="check">
+		<mkdir dir="${bin-dir}" />
+		<javac fork="${fork}" debug="${debug}" debuglevel="${debuglevel}" destdir="${bin-dir}" source="${source}" target="${target}">
+			<src path="${src-dir}" />
+			<classpath>
+				<fileset dir="${servlet-lib.location}" />
+			</classpath>
+		</javac>
+		<copy includeemptydirs="false" todir="${bin-dir}">
+			<fileset dir="${src-dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="distribute" depends="build">
+		<mkdir dir="${dist-dir}" />
+		<jar destfile="${dist-dir}/${dist.name}" basedir="${bin-dir}">
+			<exclude name="**/junit/*" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${dist.title}" />
+				<attribute name="Implementation-Version" value="${dist.version}" />
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+		</jar>
+	</target>
+	<target name="bundle" depends="distribute">
+		<copy todir="${web-root}/WEB-INF/lib">
+			<fileset dir="${dist-dir}" />
+		</copy>
+		<jar destfile="${bundle.file}">
+			<fileset dir="${web-root}" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${bundle.title}" />
+				<attribute name="Implementation-Version" value="${bundle.version}" />
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+		</jar>
+		<delete>
+			<fileset dir="${web-root}/WEB-INF/lib" />
+		</delete>
+	</target>
+	<target name="clean">
+		<delete dir="${bin-dir}" />
+		<delete dir="${dist-dir}" />
+	</target>
+	<target name="all">
+		<antcall target="clean" />
+		<antcall target="bundle" />
+		<antcall target="clean" />
+	</target>
+</project>
+
